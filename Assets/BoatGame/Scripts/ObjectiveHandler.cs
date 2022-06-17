@@ -8,19 +8,18 @@ namespace BoatGame
 {
     public class ObjectiveHandler : MonoBehaviour
     {
+        [SerializeField] TMPro.TextMeshProUGUI output;
         [SerializeField] List<Objective> objectivesToComplete;
         [SerializeField] List<Objective> rules;
-        List<bool> doneObjectives;
 
         void Start()
         {
-            doneObjectives = new List<bool>(objectivesToComplete.Count);
             foreach (Objective objective in objectivesToComplete)
             {
                 objective.OnDone += () =>
                 {
-                    int i = objectivesToComplete.IndexOf(objective);
-                    doneObjectives[i] = true;
+                    objectivesToComplete.Remove(objective);
+                    UpdateText();
                 };
                 objective.OnFailed += Lose;
 
@@ -31,6 +30,8 @@ namespace BoatGame
                 objective.OnFailed += Lose;
                 objective.Start();
             }
+
+            UpdateText();
         }
 
         void Win()
@@ -52,6 +53,21 @@ namespace BoatGame
                 }
             }
             return true;
+        }
+        void UpdateText()
+        {
+            if (output)
+            {
+                output.text = String.Empty;
+                foreach (Objective objective in objectivesToComplete)
+                {
+                    output.text += objective.Description + "\n";
+                }
+                foreach (Objective rule in rules)
+                {
+                    output.text += rule.Description + "\n";
+                }
+            }
         }
     }
 }
