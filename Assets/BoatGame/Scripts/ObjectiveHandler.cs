@@ -20,6 +20,8 @@ namespace BoatGame
                 {
                     objectivesToComplete.Remove(objective);
                     UpdateText();
+                    if (CheckWin())
+                        Win();
                 };
                 objective.OnFailed += Lose;
 

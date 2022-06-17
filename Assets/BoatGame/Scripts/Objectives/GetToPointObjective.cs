@@ -8,9 +8,10 @@ namespace BoatGame
     public class GetToPointObjective : Objective
     {
         [SerializeField] string pointTag;
-        bool done = false;
+        bool done;
         public override void Start()
         {
+            done = false;
             GameObject namedObject = GameObject.FindGameObjectWithTag(pointTag);
             Point pointComponent = namedObject.GetComponent<Point>();
             if (!pointComponent)
