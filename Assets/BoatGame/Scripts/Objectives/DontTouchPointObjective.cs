@@ -8,12 +8,11 @@ namespace BoatGame
     public class DontTouchPointObjective : Objective
     {
         [SerializeField] string pointTag;
-        List<Point> points;
+        List<Point> points = new List<Point>();
         bool failed = false;
 
         public override void Start()
         {
-            points.Clear();
             GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag(pointTag);
             
             foreach(GameObject obj in taggedObjects)

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace BoatGame
 {
+    [RequireComponent(typeof(GameState))]
     public class ObjectiveHandler : MonoBehaviour
     {
         [SerializeField] TMPro.TextMeshProUGUI output;
@@ -14,6 +15,7 @@ namespace BoatGame
 
         void Start()
         {
+            ResetObjectives();
             foreach (Objective objective in objectivesToComplete)
             {
                 objective.OnDone += () =>
@@ -38,12 +40,11 @@ namespace BoatGame
 
         void Win()
         {
-            print("Win!");
+            GetComponent<GameState>().WinState();
         }
         void Lose()
         {
-            Scene scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
+            GetComponent<GameState>().LoseState();
         }
         bool CheckWin()
         {
@@ -69,6 +70,17 @@ namespace BoatGame
                 {
                     output.text += rule.Description + "\n";
                 }
+            }
+        }
+        void ResetObjectives()
+        {
+            for (int i = 0; i < objectivesToComplete.Count; ++i)
+            {
+                objectivesToComplete[i] = Instantiate(objectivesToComplete[i]);
+            }
+            for (int i = 0; i < rules.Count; ++i)
+            {
+                rules[i] = Instantiate(rules[i]);
             }
         }
     }
