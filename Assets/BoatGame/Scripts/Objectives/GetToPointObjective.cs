@@ -8,25 +8,31 @@ namespace BoatGame
     public class GetToPointObjective : Objective
     {
         [SerializeField] string pointTag;
-        Point point;
+        bool done = false;
         public override void Start()
         {
             GameObject namedObject = GameObject.FindGameObjectWithTag(pointTag);
             Point pointComponent = namedObject.GetComponent<Point>();
-            if (pointComponent)
-                point = pointComponent;
-            else
-                point = namedObject.AddComponent<Point>();
+            if (!pointComponent)
+                pointComponent = namedObject.AddComponent<Point>();
+
+            pointComponent.OnTrigger += SetDone;
         }
         public override bool IsDone()
         {
-            if (point)
-                return point.Triggered;
-            return false;
+            return done;
         }
         public override bool IsFailed()
         {
             return false;
+        }
+        void SetDone()
+        {
+            if (!done)
+            {
+                done = true;
+                OnDone?.Invoke();
+            }
         }
     }
 }

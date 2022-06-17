@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,46 +10,26 @@ namespace BoatGame
     {
         [SerializeField] List<Objective> objectivesToComplete;
         [SerializeField] List<Objective> rules;
+        List<bool> doneObjectives;
 
         void Start()
         {
+            doneObjectives = new List<bool>(objectivesToComplete.Count);
             foreach (Objective objective in objectivesToComplete)
             {
-                objective.Start();
-            }
-            foreach (Objective objective in rules)
-            {
-                objective.Start();
-            }
-        }
-        void Update()
-        {
-            foreach (Objective objective in rules)
-            {
-                if (objective.IsFailed())
+                objective.OnDone += () =>
                 {
-                    Lose();
-                    break;
-                }
-            }
+                    int i = objectivesToComplete.IndexOf(objective);
+                    doneObjectives[i] = true;
+                };
+                objective.OnFailed += Lose;
 
-            bool somethingNotDone = false;
-            foreach (Objective objective in objectivesToComplete)
-            {
-                if (objective.IsFailed())
-                {
-                    somethingNotDone = true;
-                    Lose();
-                    break;
-                }
-                if (!objective.IsDone())
-                {
-                    somethingNotDone = true;
-                }
+                objective.Start();
             }
-            if (!somethingNotDone)
+            foreach (Objective objective in rules)
             {
-                Win();
+                objective.OnFailed += Lose;
+                objective.Start();
             }
         }
 
@@ -60,6 +41,17 @@ namespace BoatGame
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
+        }
+        bool CheckWin()
+        {
+            foreach (Objective objective in objectivesToComplete)
+            {
+                if (!objective.IsDone())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

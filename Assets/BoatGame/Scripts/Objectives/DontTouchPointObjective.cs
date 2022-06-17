@@ -9,6 +9,8 @@ namespace BoatGame
     {
         [SerializeField] string pointTag;
         List<Point> points;
+        bool failed = false;
+
         public override void Start()
         {
             points.Clear();
@@ -17,10 +19,11 @@ namespace BoatGame
             foreach(GameObject obj in taggedObjects)
             {
                 Point pointComponent = obj.GetComponent<Point>();
-                if (pointComponent)
-                    points.Add(pointComponent);
-                else
-                    points.Add(obj.AddComponent<Point>());
+                if (!pointComponent)
+                    pointComponent = obj.AddComponent<Point>();
+
+                pointComponent.OnTrigger += SetFailed;
+                points.Add(pointComponent);
             }
         }
         public override bool IsDone()
@@ -30,12 +33,13 @@ namespace BoatGame
 
         public override bool IsFailed()
         {
-            foreach(Point point in points)
-            {
-                if (point.Triggered)
-                    return true;
-            }
-            return false;
+            return failed;
+        }
+
+        void SetFailed()
+        {
+            failed = true;
+            OnFailed?.Invoke();
         }
     }
 }
