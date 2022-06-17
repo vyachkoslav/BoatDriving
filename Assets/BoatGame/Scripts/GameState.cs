@@ -12,14 +12,16 @@ public class GameState : MonoBehaviour
 
     public void WinState()
     {
-        endMenu.SetActive(true);
-        stateText.text = k_winText;
-        PauseGame();
+        SetState(k_winText);
     }
     public void LoseState()
     {
+        SetState(k_loseText);
+    }
+    void SetState(string text)
+    {
         endMenu.SetActive(true);
-        stateText.text = k_loseText;
+        stateText.text = text;
         PauseGame();
     }
     void PauseGame()
