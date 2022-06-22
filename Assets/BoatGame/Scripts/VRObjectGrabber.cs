@@ -6,8 +6,8 @@ namespace BoatGame
 {
     public class VRObjectGrabber : MonoBehaviour
     {
-        GrabbableObject selectedObject;
-        GrabbableObject grabbedObject;
+        RotatableObject selectedObject;
+        RotatableObject grabbedObject;
         void Update()
         {
             if (grabbedObject)
@@ -22,7 +22,7 @@ namespace BoatGame
         }
         void OnTriggerEnter(Collider other)
         {
-            GrabbableObject grabbable = other.GetComponent<GrabbableObject>();
+            RotatableObject grabbable = other.GetComponent<RotatableObject>();
             if (grabbable)
             {
                 selectedObject = grabbable;

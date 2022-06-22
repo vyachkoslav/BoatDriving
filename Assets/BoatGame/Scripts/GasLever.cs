@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace BoatGame
 {
-    public class SteeringWheel : PhysicInput
+    public class GasLever : PhysicInput
     {
         protected override void SetInput(float value)
         {
-            shipInputHandler.Steering = value;
+            shipInputHandler.Throttle = value;
         }
     }
 }
