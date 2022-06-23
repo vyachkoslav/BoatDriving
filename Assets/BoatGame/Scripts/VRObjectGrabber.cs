@@ -1,26 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace BoatGame
 {
     public class VRObjectGrabber : MonoBehaviour
     {
+        XRController controller;
         RotatableObject selectedObject;
         RotatableObject grabbedObject;
+        private void Start()
+        {
+            controller = GetComponentInParent<XRController>();
+        }
         void Update()
         {
-            if (grabbedObject)
+            if (InputProvider.Select(controller) > 0.9)
             {
-                grabbedObject.SetPosition(transform.position);
+                if (selectedObject && grabbedObject != selectedObject)
+                {
+                    GrabObject();
+                }
+
+                if (grabbedObject)
+                {
+                    grabbedObject.SetPosition(transform.position);
+                }
             }
             else
             {
-                GrabObject();
+                Drop();
             }
-            
         }
-        void OnTriggerEnter(Collider other)
+        void OnTriggerStay(Collider other)
         {
             RotatableObject grabbable = other.GetComponent<RotatableObject>();
             if (grabbable)
@@ -34,6 +47,10 @@ namespace BoatGame
             {
                 grabbedObject = selectedObject;
             }
+        }
+        void Drop()
+        {
+            grabbedObject = null;
         }
     }
 }

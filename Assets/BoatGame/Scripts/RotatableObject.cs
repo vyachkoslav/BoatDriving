@@ -42,13 +42,8 @@ namespace BoatGame
             
             var toPointA = point2.position - transformToGrab.position;
             var toPointB = pointB - transformToGrab.position;
-            float angle = Vector3.Angle(toPointA, toPointB);
-            angle *= Mathf.Sign(Vector3.Cross(toPointA, toPointB).y);
+            float angle = Vector3.SignedAngle(toPointA, toPointB, transformToGrab.forward);
 
-            Debug.DrawRay(transformToGrab.position, toPointA, Color.green, 5f, false);
-            Debug.DrawRay(transformToGrab.position, toPointB, Color.red, 5f, false);
-            
-            
             angle = Mathf.Clamp(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
             angle -= GetRotatingAngle();
             transformToGrab.Rotate(angle * filter);
