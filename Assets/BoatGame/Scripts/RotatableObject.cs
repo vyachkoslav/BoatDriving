@@ -26,19 +26,18 @@ namespace BoatGame
             var newDir = newPosOnAxis - axis.Center;
 
             float angle = Vector3.SignedAngle(upDir, newDir, axis.Forward);
-            angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
+            angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle); // angle not out of max range
             angle -= GetRotatingAngle();
 
-            if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2))
+            
+
+            if (Mathf.Abs(current) < maxAngle)
+                axis.Rotate(angle);
+
+            if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2)) // if hand teleported to other side
                 current *= -1;
             else
                 current += angle;
-            current = Mathf.Clamp(current, -maxAngle, maxAngle);
-
-            if (maxAngle < 180 || Mathf.Abs(current) < maxAngle)
-                axis.Rotate(angle);
-
-            
         }
         float GetRotatingAngle()
         {

@@ -15,7 +15,7 @@ namespace BoatGame
 
         void Start()
         {
-            ResetObjectives();
+            ResetObjectives(); // reset scriptables on scene load
             foreach (Objective objective in objectivesToComplete)
             {
                 objective.OnDone += () =>
