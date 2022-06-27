@@ -29,7 +29,8 @@ namespace BoatGame
             angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
             angle -= GetRotatingAngle();
 
-            axis.Rotate(angle);
+            if (Mathf.Abs(current) < maxAngle)
+                axis.Rotate(angle);
 
             if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2))
                 current *= -1;
