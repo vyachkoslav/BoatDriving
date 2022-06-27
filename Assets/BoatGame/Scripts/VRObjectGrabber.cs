@@ -18,7 +18,7 @@ namespace BoatGame
         {
             if (InputProvider.Select(controller) > 0.9)
             {
-                if (selectedObject && grabbedObject != selectedObject)
+                if (selectedObject && !grabbedObject)
                 {
                     GrabObject();
                 }

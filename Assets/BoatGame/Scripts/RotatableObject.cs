@@ -6,61 +6,56 @@ namespace BoatGame
 {
     public class RotatableObject : MonoBehaviour
     {
-        [SerializeField] Transform transformToGrab;
-        public Transform TransformToGrab => transformToGrab;
-        public Transform point2, point3;
+        [SerializeField] Axis axis;
         
-        enum Axis { x, y, z }
-        [SerializeField] Axis rotatingAxis;
-        Vector3 filter;
         [SerializeField] float maxAngle;
         public float MaxAngle => maxAngle;
         float defaultRotation;
-        public float CurrentAngle => GetRotatingAngle() - defaultRotation;
+        public float CurrentAngle => -current;
+        float current;
 
-        // Start is called before the first frame update
         void Start()
         {
             defaultRotation = GetRotatingAngle();
-            switch (rotatingAxis)
-            {
-                case Axis.x:
-                    filter = Vector3.right;
-                    break;
-                case Axis.y:
-                    filter = Vector3.up;
-                    break;
-                case Axis.z:
-                    filter = Vector3.forward;
-                    break;
-            }
         }
         public void SetPosition(Vector3 position)
         {
-            Plane wheelNormal = new Plane(transformToGrab.position, point2.position, point3.position);
-            Vector3 pointB = wheelNormal.ClosestPointOnPlane(position);
+            Vector3 newPosOnAxis = axis.ClosestPointOnAxis(position);
             
-            var toPointA = point2.position - transformToGrab.position;
-            var toPointB = pointB - transformToGrab.position;
-            float angle = Vector3.SignedAngle(toPointA, toPointB, transformToGrab.forward);
+            var upDir = axis.Up;
+            var newDir = newPosOnAxis - axis.Center;
 
-            angle = Mathf.Clamp(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
+            float angle = Vector3.SignedAngle(upDir, newDir, axis.Forward);
+            angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
             angle -= GetRotatingAngle();
-            transformToGrab.Rotate(angle * filter);
+
+            axis.Rotate(angle);
+
+            if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2))
+                current *= -1;
+            else
+                current += angle;
+            current = Mathf.Clamp(current, -maxAngle, maxAngle);
         }
         float GetRotatingAngle()
         {
-            switch (rotatingAxis)
-            {
-                case Axis.x:
-                    return transformToGrab.localEulerAngles.x;
-                case Axis.y:
-                    return transformToGrab.localEulerAngles.y;
-                case Axis.z:
-                    return transformToGrab.localEulerAngles.z;
-                default:
-                    return transformToGrab.localEulerAngles.x;
-            }
+            return axis.GetAngle();
+        }
+        static float ClampAngle(float angle, float min, float max)
+        {
+            float start = (min + max) * 0.5f - 180;
+            float floor = Mathf.FloorToInt((angle - start) / 360) * 360;
+            min += floor;
+            max += floor;
+            return Mathf.Clamp(angle, min, max);
+        }
+        static float NormalizeAngle(float angle)
+        {
+            if (angle < 0)
+                angle = angle % 360 + 360;
+            else if (angle > 360)
+                angle %= 360;
+            return angle;
         }
     }
 }
