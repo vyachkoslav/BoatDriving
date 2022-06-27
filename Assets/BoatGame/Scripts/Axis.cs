@@ -16,6 +16,10 @@ namespace BoatGame
         {
             transform.Rotate(Vector3.forward * angle);
         }
+        public void SetRotation(float angle)
+        {
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
+        }
         public float GetAngle()
         {
             return transform.localEulerAngles.z;

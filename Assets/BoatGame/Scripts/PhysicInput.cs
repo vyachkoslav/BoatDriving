@@ -6,14 +6,16 @@ using UnityEngine;
 
 namespace BoatGame
 {
-    public abstract class PhysicInput : MonoBehaviour
+    public class PhysicInput : MonoBehaviour
     {
         [SerializeField] RotatableObject inputObject;
-        protected ShipInputHandler shipInputHandler;
-        private void FixedUpdate()
+
+        public float Value => GetValue();
+
+        float GetValue()
         {
-            if(shipInputHandler == null)
-                shipInputHandler = ((AdvancedShipController)VehicleChanger.ActiveVehicle).input;
+            if (!inputObject)
+                return 0f;
 
             float normalizedAngle = 0f;
             if (inputObject.MaxAngle != 0)
@@ -21,9 +23,7 @@ namespace BoatGame
                 normalizedAngle = inputObject.CurrentAngle / inputObject.MaxAngle;
             }
 
-            SetInput(normalizedAngle);
+            return normalizedAngle;
         }
-
-        protected abstract void SetInput(float value);
     }
 }

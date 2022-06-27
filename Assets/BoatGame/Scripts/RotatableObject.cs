@@ -29,14 +29,16 @@ namespace BoatGame
             angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle);
             angle -= GetRotatingAngle();
 
-            if (Mathf.Abs(current) < maxAngle)
-                axis.Rotate(angle);
-
             if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2))
                 current *= -1;
             else
                 current += angle;
             current = Mathf.Clamp(current, -maxAngle, maxAngle);
+
+            if (maxAngle < 180 || Mathf.Abs(current) < maxAngle)
+                axis.Rotate(angle);
+
+            
         }
         float GetRotatingAngle()
         {
@@ -49,14 +51,6 @@ namespace BoatGame
             min += floor;
             max += floor;
             return Mathf.Clamp(angle, min, max);
-        }
-        static float NormalizeAngle(float angle)
-        {
-            if (angle < 0)
-                angle = angle % 360 + 360;
-            else if (angle > 360)
-                angle %= 360;
-            return angle;
         }
     }
 }

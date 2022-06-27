@@ -36,17 +36,15 @@ namespace BoatGame
         void OnTriggerStay(Collider other)
         {
             RotatableObject grabbable = other.GetComponent<RotatableObject>();
+            if (!grabbable)
+                grabbable = other.GetComponentInParent<RotatableObject>();
             if (grabbable)
-            {
                 selectedObject = grabbable;
-            }
         }
         void GrabObject()
         {
             if (selectedObject)
-            {
                 grabbedObject = selectedObject;
-            }
         }
         void Drop()
         {
