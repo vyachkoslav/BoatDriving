@@ -29,8 +29,6 @@ namespace BoatGame
             angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle); // angle not out of max range
             angle -= GetRotatingAngle();
 
-            
-
             if (Mathf.Abs(current) < maxAngle)
                 axis.Rotate(angle);
 

@@ -2,6 +2,7 @@ using NWH.DWP2.ShipController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BoatGame
 {
@@ -24,6 +25,8 @@ namespace BoatGame
 
         [SerializeField] AdvancedShipController shipController;
         List<Engine> engines;
+
+        [SerializeField] Image fuelUISlider;
 
         void Start()
         {
@@ -50,6 +53,9 @@ namespace BoatGame
                         rpmSum += engine.RPM;
                 }
                 FuelAmount -= rpmSum * fuelConsumptionRatio * Time.deltaTime * 0.0001f;
+
+                if (fuelUISlider)
+                    fuelUISlider.fillAmount = FuelRatio + 0.1f;
             }
             else if (shipController.IsAwake)
                 shipController.Sleep();
