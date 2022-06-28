@@ -28,9 +28,7 @@ namespace BoatGame
             angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle); // angle not out of max range
             angle -= GetRotatingAngle();
 
-            if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2)) // if hand teleported to other side
-                CurrentAngle *= -1;
-            else if (Mathf.Abs(CurrentAngle + angle) <= MaxAngle)
+            if (Mathf.Abs(CurrentAngle + angle) <= MaxAngle)
                 CurrentAngle += angle;
 
             if (Mathf.Abs(CurrentAngle) < maxAngle)
