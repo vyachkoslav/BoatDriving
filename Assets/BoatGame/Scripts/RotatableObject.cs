@@ -34,7 +34,7 @@ namespace BoatGame
 
             if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2)) // if hand teleported to other side
                 current *= -1;
-            else
+            else if(Mathf.Abs(current + angle) < MaxAngle)
                 current += angle;
         }
         float GetRotatingAngle()
