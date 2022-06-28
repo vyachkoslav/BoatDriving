@@ -8,10 +8,12 @@ namespace BoatGame
     public class Compass : MonoBehaviour
     {
         [SerializeField] TMPro.TextMeshProUGUI output;
+        [SerializeField] Transform objectTransform;
+
         void Update()
         {
             if (output)
-                output.SetText(GetDirection(transform));
+                output.SetText(GetDirection(objectTransform));
         }
         public static float GetCompassAngle(Transform obj)
         {
