@@ -11,8 +11,7 @@ namespace BoatGame
         [SerializeField] float maxAngle;
         public float MaxAngle => maxAngle;
         float defaultRotation;
-        public float CurrentAngle => -current;
-        float current;
+        public float CurrentAngle { get; private set; }
 
         void Start()
         {
@@ -29,13 +28,14 @@ namespace BoatGame
             angle = ClampAngle(GetRotatingAngle() + angle, defaultRotation - maxAngle, defaultRotation + maxAngle); // angle not out of max range
             angle -= GetRotatingAngle();
 
-            if (Mathf.Abs(current) < maxAngle)
-                axis.Rotate(angle);
-
             if (Mathf.Approximately(Mathf.Abs(angle), maxAngle * 2)) // if hand teleported to other side
-                current *= -1;
-            else if(Mathf.Abs(current + angle) < MaxAngle)
-                current += angle;
+                CurrentAngle *= -1;
+            else if (Mathf.Abs(CurrentAngle + angle) <= MaxAngle)
+                CurrentAngle += angle;
+
+            if (Mathf.Abs(CurrentAngle) < maxAngle)
+                axis.SetRotation(defaultRotation + CurrentAngle);
+
         }
         float GetRotatingAngle()
         {

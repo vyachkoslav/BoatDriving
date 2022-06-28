@@ -58,7 +58,13 @@ namespace BoatGame
                     fuelUISlider.fillAmount = FuelRatio + 0.1f;
             }
             else if (shipController.IsAwake)
+            {
+                bool temp = shipController.dropAnchorWhenInactive;
+                shipController.dropAnchorWhenInactive = false;
                 shipController.Sleep();
+                shipController.dropAnchorWhenInactive = temp;
+
+            }
         }
     }
 }
